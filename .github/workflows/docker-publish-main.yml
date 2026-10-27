@@ -1,10 +1,6 @@
 name: ASF-docker-publish-main
 
-on:
-  push:
-    branches:
-    - main
-  workflow_dispatch:
+on: [workflow_dispatch]
 
 env:
   PLATFORMS: linux/amd64,linux/arm,linux/arm64

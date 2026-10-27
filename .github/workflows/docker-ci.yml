@@ -1,6 +1,6 @@
 name: ASF-docker-ci
 
-on: [pull_request, push, workflow_dispatch]
+on: [workflow_dispatch]
 
 env:
   PLATFORMS: linux/amd64,linux/arm,linux/arm64
