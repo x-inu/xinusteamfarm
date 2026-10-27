@@ -1,0 +1,52 @@
+name: ASF-ui-ci
+
+on: [push, pull_request]
+
+env:
+  NODE_JS_VERSION: 'lts/*'
+
+permissions: {}
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        show-progress: false
+
+    - name: Setup Node.js with npm
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        check-latest: true
+        node-version: ${{ env.NODE_JS_VERSION }}
+
+    - name: Verify Node.js
+      run: node -v
+
+    - name: Verify npm
+      run: npm -v
+
+    - name: Install npm modules for ASF-ui
+      run: npm ci --no-progress
+
+    - name: Build ASF-ui
+      run: npm run-script deploy --no-progress
+
+    - name: Test ASF-ui dev environment
+      run: npm run-script serve:ci --no-progress
+
+    - name: Upload ASF-ui
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        compression-level: 1
+        if-no-files-found: error
+        name: ${{ matrix.os }}_ASF-ui
+        path: dist
