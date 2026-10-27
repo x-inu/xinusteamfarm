@@ -42,15 +42,18 @@
 </script>
 
 <style lang="scss">
+  @import '../../style/settings';
+
   .side-menu {
-    background: var(--color-navigation);
+    background: var(--color-background-light);
+    border-left: 1px solid var(--color-border);
     bottom: 0;
     padding-top: var(--navigation-height);
     position: fixed;
     right: -15em;
     top: 0;
-    transition: transform ease-in-out .3s;
     transform: translate(-15em, 0);
+    transition: transform #{$move} #{$ease-out};
     width: 15em;
     z-index: 1001;
 
@@ -74,25 +77,29 @@
 
   .theme-switcher__theme {
     background: var(--color-theme);
-    border: 3px solid var(--color-theme);
-    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius, 2px);
     box-sizing: border-box;
     cursor: pointer;
     height: 20px;
     margin: auto;
-    transition: background .3s;
+    transition: border-color #{$snap} #{$ease-out};
     width: 20px;
 
     &:hover {
-      background: var(--color-theme-dark);
+      border-color: var(--color-text);
     }
   }
 
   .side-menu__category {
     box-sizing: border-box;
-    color: var(--color-text-secondary);
+    color: var(--color-text-dark);
+    font-size: 0.75em;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     margin: 1em 0 0.5em;
     padding: 0 1em;
+    text-transform: uppercase;
   }
 
   .side-menu__switch--boxed {
@@ -103,10 +110,12 @@
 
   .side-menu__info {
     bottom: 0;
+    color: var(--color-text-disabled);
+    font-size: 0.8em;
+    margin-bottom: 0.5em;
     padding: 1em 0.5em;
     position: absolute;
     text-align: center;
-    margin-bottom: 0.5em;
 
     a {
       color: var(--color-theme);

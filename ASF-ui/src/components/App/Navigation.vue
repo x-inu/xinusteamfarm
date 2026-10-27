@@ -71,8 +71,11 @@
 </script>
 
 <style lang="scss">
+  @import '../../style/settings';
+
   .side-navigation {
-    background: var(--color-navigation);
+    background: var(--color-background);
+    border-right: 1px solid var(--color-border);
     bottom: 0;
     display: flex;
     flex-direction: column;
@@ -81,7 +84,7 @@
     padding-top: var(--navigation-height);
     position: fixed;
     top: 0;
-    transition: ease-in-out width .3s;
+    transition: width #{$move} #{$ease-out};
     width: var(--navigation-width);
     z-index: 1001;
 

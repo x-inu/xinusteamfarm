@@ -31,16 +31,30 @@
 </script>
 
 <style lang="scss">
+  @import '../../../style/settings';
+
   .side-menu__switch {
     align-items: center;
     color: var(--color-text-secondary);
     cursor: pointer;
     display: flex;
+    font-size: 0.875em;
     justify-content: space-between;
-    padding: 1em 1em 0.5em;
+    padding: 0.85em 1em;
+    transition: color #{$snap} #{$ease-out};
 
+    &:hover {
+      color: var(--color-text);
+    }
+
+    > .xicon--times-circle,
     > svg[data-icon="times-circle"] {
       color: var(--color-text-disabled);
+    }
+
+    > .xicon--check-circle,
+    > svg[data-icon="check-circle"] {
+      color: var(--color-theme);
     }
   }
 

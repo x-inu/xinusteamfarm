@@ -64,8 +64,11 @@
 </script>
 
 <style lang="scss">
+  @import '../../style/settings';
+
   .upper-navigation {
-    background: var(--color-theme);
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
     display: flex;
     height: var(--navigation-height);
     position: fixed;
@@ -82,14 +85,16 @@
 
   .navigation__button {
     align-items: center;
-    color: var(--color-text);
+    color: var(--color-text-dark);
     cursor: pointer;
     display: flex;
     justify-content: center;
     padding: 0 1em;
+    transition: color #{$snap} #{$ease-out}, background #{$snap} #{$ease-out};
 
     &.navigation__button--active, &:hover {
-      background: var(--color-theme-dark);
+      background: var(--color-tint-5);
+      color: var(--color-text);
     }
   }
 

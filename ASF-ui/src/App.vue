@@ -1,5 +1,5 @@
 <template>
-  <div class="app" :class="[{ 'app--not-authorized': !authenticated, 'app--small-navigation': smallNavigation, 'app--boxed-layout': boxedLayout, 'app--dark-mode': darkMode }, themeClass]">
+  <div class="app" :class="[{ 'app--not-authorized': !authenticated, 'app--small-navigation': smallNavigation, 'app--boxed-layout': boxedLayout, 'app--daylight': !darkMode }, themeClass]">
     <AppHeader></AppHeader>
     <AppNavigation></AppNavigation>
     <AppSideMenu></AppSideMenu>
@@ -26,8 +26,8 @@
   export default {
     name: 'App',
     metaInfo: {
-      title: 'ArchiSteamFarm',
-      titleTemplate: 'ASF | %s',
+      title: 'XinuSteamFarm',
+      titleTemplate: 'XinuSteamFarm | %s',
     },
     components: {
       AppHeader, AppNavigation, AppFooter, AppSideMenu, AppModal,
@@ -49,12 +49,6 @@
       },
     },
     watch: {
-      darkMode: {
-        immediate: true,
-        handler(value) {
-          document.documentElement.style.setProperty('--color-background-dark', (value) ? '#0c0c0c' : '#a7a7a7');
-        },
-      },
       $route: {
         immediate: true,
         handler(value) {
@@ -100,36 +94,90 @@
   @import './style/settings';
   @import './style/components';
 
+  /* ---- Self-hosted typefaces (no external CDN) ---- */
+  @font-face {
+    font-family: "Fraunces Variable";
+    src: url('./static/fonts/fraunces-variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Space Grotesk Variable";
+    src: url('./static/fonts/space-grotesk-variable.woff2') format('woff2');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Space Mono";
+    src: url('./static/fonts/space-mono-400.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Space Mono";
+    src: url('./static/fonts/space-mono-700.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
   :root {
+    --font-sans: #{$f-sans};
+    --font-display: #{$f-display};
+    --font-mono: #{$f-mono};
+    --radius: #{$radius};
+
     --navigation-width: #{$size-navigation};
     --navigation-height: #{$size-navigation-small};
-    --color-theme: #{$color-theme-blue};
-    --color-theme-dark: #{darken($color-theme-blue, 5)};
-    --color-theme-light: #{lighten($color-theme-blue, 5)};
-    --color-text: #{$color-text};
-    --color-text-dark: #{$color-text-dark};
-    --color-text-info: #{$color-text-info};
-    --color-text-secondary: #{darken($color-text, 10)};
-    --color-text-disabled: #{darken($color-text, 25)};
-    --color-border: #{darken($color-text, 25)};
-    --color-background: #ecf0f5;
-    --color-background-modal: #ecf0f5;
-    --color-background-light: #fff;
-    --color-background-dark: #a7a7a7;
-    --color-navigation: #222d32;
-    --color-navigation-dark: #{darken(#222d32, 3)};
-    --color-navigation-darker: #{darken(#222d32, 10)};
 
-    --color-button-cancel: #{$color-theme-red};
-    --color-button-cancel-active: #{lighten($color-theme-red, 5)};
-    --color-button-default: #222d32;
+    /* Paper (default edition: amaterasu) */
+    --color-background: #000;
+    --color-background-light: #0a0a0a;
+    --color-background-dark: #050505;
+    --color-background-modal: rgb(0 0 0 / 88%);
 
-    --color-releases-pre: var(--color-text-secondary);
-    --color-releases-code: rgb(27 31 35 / 5%);
+    /* Ink */
+    --color-text: #{$ink};
+    --color-text-secondary: #{$ink-dim};
+    --color-text-dark: #{$ink-muted};
+    --color-text-disabled: #{$ink-faint};
+    --color-text-info: #{$color-level-warning};
+    --color-on-theme: #{$ink-on-signal};
+
+    /* Hairlines & tints */
+    --color-border: rgb(205 196 186 / #{$line-alpha});
+    --color-line-soft: rgb(205 196 186 / #{$line-soft-alpha});
+    --color-line-strong: rgb(205 196 186 / #{$line-strong-alpha});
+    --color-tint-5: rgb(205 196 186 / #{$tint-5-alpha});
+    --color-tint-10: rgb(205 196 186 / #{$tint-10-alpha});
+    --color-tint-16: rgb(205 196 186 / #{$tint-16-alpha});
+
+    /* Signal (amaterasu: burnt orange) */
+    --color-theme: #ce5e32;
+    --color-theme-dark: #{darken(#ce5e32, 10)};
+    --color-theme-light: #{lighten(#ce5e32, 6)};
+
+    /* Navigation — same paper, separated by hairline */
+    --color-navigation: #000;
+    --color-navigation-dark: rgb(205 196 186 / 5%);
+    --color-navigation-darker: #050505;
+
+    --color-button-default: #0a0a0a;
+    --color-button-cancel: transparent;
+    --color-button-cancel-active: rgb(211 101 77 / 12%);
+
+    --color-releases-pre: var(--color-text-dark);
+    --color-releases-code: rgb(205 196 186 / 8%);
   }
 
   html {
-    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: #{$f-sans};
     font-size: 16px;
     height: 100%;
   }
@@ -138,6 +186,17 @@
     background: var(--color-background-dark);
     height: 100%;
     margin: 0;
+  }
+
+  /* Paper grain, laid over everything */
+  body::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    content: '';
+    inset: 0;
+    opacity: .04;
+    pointer-events: none;
+    position: fixed;
+    z-index: 2147483647;
   }
 
   @media screen and (max-height: 835px), screen and (max-width: 1366px) {
@@ -152,24 +211,91 @@
     }
   }
 
+  ::selection {
+    background: var(--color-theme);
+    color: var(--color-on-theme);
+  }
+
   ::-webkit-scrollbar {
     background-color: var(--color-background-dark);
-    height: 10px;
-    width: 10px;
+    height: 8px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 2px;
+    background: var(--color-line-strong);
+    border-radius: 1px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-disabled);
   }
 
   a {
     text-decoration: none;
   }
 
+  :focus-visible {
+    outline: 1px solid var(--color-theme);
+    outline-offset: 1px;
+  }
+
+  /* ---- Xicons (inline SVG icon set) ---- */
+  svg.xicon {
+    display: inline-block;
+    fill: none;
+    height: 1em;
+    overflow: visible;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    vertical-align: -.125em;
+  }
+
+  .xicon--fw {
+    width: 1.25em;
+  }
+
+  .xicon--lg {
+    font-size: 1.3333em;
+    line-height: .75em;
+    vertical-align: -.225em;
+  }
+
+  .xicon--sm {
+    font-size: .875em;
+  }
+
+  .xicon--spin {
+    animation: xicon-spin 1.2s linear infinite;
+  }
+
+  @keyframes xicon-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .xicons-layers {
+    display: inline-block;
+    height: 1em;
+    position: relative;
+    vertical-align: -.125em;
+    width: 1.25em;
+
+    > svg {
+      height: 1em;
+      left: 50%;
+      margin-left: -.5em;
+      position: absolute;
+      top: 0;
+    }
+  }
+
   .app {
     background: var(--color-background);
-    color: var(--color-text-dark);
+    color: var(--color-text);
+    font-family: var(--font-sans);
     width: 100%;
     -webkit-overflow-scrolling: touch;
   }
@@ -180,65 +306,60 @@
 
   .app--boxed-layout {
     @media screen and (min-width: 1250px) {
-      box-shadow: 0 0 25px 0 var(--color-navigation-dark);
-      max-width: 1250px;
+      border: 1px solid var(--color-line-soft);
       margin: 0 auto;
+      max-width: 1250px;
       overflow-x: hidden;
       position: relative;
     }
   }
 
-  .app--dark-mode {
-    --color-background: #111;
-    --color-background-light: #222;
-    --color-background-modal: #2d2d2d;
-    --color-text: #e0e0e0;
-    --color-text-dark: #94999b;
-    --color-text-info: #ffa500;
-    --color-border: rgba(0, 0, 0, .5);
-    --color-text-secondary: #{darken(#bfbfbf, 10)};
-    --color-text-disabled: #{darken(#bfbfbf, 20)};
-    --color-button-default: #4f5454;
+  /* ---- Edition themes (dark papers) ---- */
+  @each $name, $pal in $editions {
+    .theme-#{$name} {
+      --color-theme: #{map-get($pal, 'dark-signal')};
+      --color-theme-dark: #{darken(map-get($pal, 'dark-signal'), 10)};
+      --color-theme-light: #{lighten(map-get($pal, 'dark-signal'), 6)};
+      --color-background: #{map-get($pal, 'dark-paper')};
+      --color-background-light: #{map-get($pal, 'dark-raised')};
+      --color-navigation: #{map-get($pal, 'dark-paper')};
+    }
+  }
+
+  /* ---- Daylight papers (inverted mode) ---- */
+  .app--daylight {
+    --color-background: #efe9df;
+    --color-background-light: #f8f4ed;
+    --color-background-dark: #e4ddcf;
+    --color-background-modal: rgb(21 17 13 / 55%);
+    --color-text: #211b15;
+    --color-text-secondary: #4a423a;
+    --color-text-dark: #6b625a;
+    --color-text-disabled: #8a8178;
+    --color-text-info: #9c6b1f;
+    --color-on-theme: #f8f4ed;
+    --color-border: rgb(33 27 21 / 22%);
+    --color-line-soft: rgb(33 27 21 / 11%);
+    --color-line-strong: rgb(33 27 21 / 38%);
+    --color-tint-5: rgb(33 27 21 / 4%);
+    --color-tint-10: rgb(33 27 21 / 8%);
+    --color-tint-16: rgb(33 27 21 / 13%);
+    --color-navigation: #efe9df;
+    --color-navigation-dark: rgb(33 27 21 / 5%);
+    --color-navigation-darker: #e4ddcf;
     --color-releases-pre: var(--color-text-dark);
-    --color-releases-code: rgb(205 217 229 / 15%);
+    --color-releases-code: rgb(33 27 21 / 7%);
   }
 
-  .theme-blue {
-    --color-theme: #{$color-theme-blue};
-    --color-theme-dark: #{darken($color-theme-blue, 5)};
-    --color-theme-light: #{lighten($color-theme-blue, 5)};
-  }
-
-  .theme-red {
-    --color-theme: #{$color-theme-red};
-    --color-theme-dark: #{darken($color-theme-red, 5)};
-    --color-theme-light: #{lighten($color-theme-red, 5)};
-    --color-button-cancel: #{darken($color-theme-orange, 5)};
-    --color-button-cancel-active: #{$color-theme-orange};
-  }
-
-  .theme-teal {
-    --color-theme: #{$color-theme-teal};
-    --color-theme-dark: #{darken($color-theme-teal, 5)};
-    --color-theme-light: #{lighten($color-theme-teal, 5)};
-  }
-
-  .theme-purple {
-    --color-theme: #{$color-theme-purple};
-    --color-theme-dark: #{darken($color-theme-purple, 5)};
-    --color-theme-light: #{lighten($color-theme-purple, 5)};
-  }
-
-  .theme-green {
-    --color-theme: #{$color-theme-green};
-    --color-theme-dark: #{darken($color-theme-green, 5)};
-    --color-theme-light: #{lighten($color-theme-green, 5)};
-  }
-
-  .theme-orange {
-    --color-theme: #{$color-theme-orange};
-    --color-theme-dark: #{darken($color-theme-orange, 5)};
-    --color-theme-light: #{lighten($color-theme-orange, 5)};
+  @each $name, $pal in $editions {
+    .app--daylight.theme-#{$name} {
+      --color-theme: #{map-get($pal, 'light-signal')};
+      --color-theme-dark: #{darken(map-get($pal, 'light-signal'), 8)};
+      --color-theme-light: #{lighten(map-get($pal, 'light-signal'), 6)};
+      --color-background: #{map-get($pal, 'light-paper')};
+      --color-background-light: #{map-get($pal, 'light-raised')};
+      --color-navigation: #{map-get($pal, 'light-paper')};
+    }
   }
 
   .content {

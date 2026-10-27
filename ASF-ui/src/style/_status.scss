@@ -1,31 +1,34 @@
 .status--disabled {
 	--color-status: #{$color-status-disabled};
-
-	.app--dark-mode & {
-		--color-status: #{darken($color-status-disabled, 20)};
-	}
 }
 
 .status--offline {
 	--color-status: #{$color-status-offline};
-
-	.app--dark-mode & {
-		--color-status: #{darken($color-status-offline, 20)};
-	}
 }
 
 .status--online {
 	--color-status: #{$color-status-online};
-
-	.app--dark-mode & {
-		--color-status: #{darken($color-status-online, 20)};
-	}
 }
 
 .status--farming {
 	--color-status: #{$color-status-farming};
+}
 
-	.app--dark-mode & {
-		--color-status: #{darken($color-status-farming, 20)};
+/* Daylight paper — deeper status hues for contrast */
+.app--daylight {
+	.status--disabled {
+		--color-status: #b5ada3;
+	}
+
+	.status--offline {
+		--color-status: #8a8178;
+	}
+
+	.status--online {
+		--color-status: #35714f;
+	}
+
+	.status--farming {
+		--color-status: #b34f28;
 	}
 }

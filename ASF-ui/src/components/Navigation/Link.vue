@@ -49,20 +49,26 @@
 </script>
 
 <style lang="scss">
+  @import '../../style/settings';
+
   .navigation-link {
     align-items: center;
-    border-left: 3px solid transparent;
+    border-left: 2px solid transparent;
     box-sizing: border-box;
-    color: var(--color-text-secondary);
+    color: var(--color-text-dark);
     cursor: pointer;
     display: flex;
+    font-size: 0.8125em;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     text-decoration: none;
-    transition: background .2s;
+    text-transform: uppercase;
+    transition: background #{$snap} #{$ease-out}, color #{$snap} #{$ease-out};
     white-space: nowrap;
     width: 100%;
 
     &.navigation-link--active, &:hover {
-      background: var(--color-navigation-dark);
+      background: var(--color-tint-5);
       color: var(--color-text);
     }
 
@@ -71,19 +77,19 @@
     }
 
     &.navigation-link--default {
-      padding: 0.95em 1.25em;
+      padding: 0.85em 1.25em;
     }
 
     &.navigation-link--small {
-      padding: 0.8em 1.25em;
-    }
-
-    &.navigation-link--xsmall {
       padding: 0.7em 1.25em;
     }
 
+    &.navigation-link--xsmall {
+      padding: 0.6em 1.25em;
+    }
+
     .app--small-navigation & {
-      padding: 0.95em 0;
+      padding: 0.85em 0;
 
       .navigation-link__icon {
         display: inline-flex;
@@ -103,11 +109,12 @@
 
         > .navigation-link__name {
           align-items: center;
-          background: var(--color-navigation-dark);
-          border-radius: 0 4px 4px 0;
+          background: var(--color-background-light);
+          border: 1px solid var(--color-border);
+          border-radius: 0 var(--radius, 2px) var(--radius, 2px) 0;
           display: flex;
           height: 100%;
-          left: calc(var(--navigation-width) - 3px);
+          left: calc(var(--navigation-width) - 2px);
           padding: 0 1.25em;
           position: absolute;
         }

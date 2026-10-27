@@ -32,15 +32,22 @@
 </script>
 
 <style lang="scss">
+  @import '../../../style/settings';
+
   .footer__link {
     align-items: center;
-    color: var(--color-theme);
+    color: var(--color-text-disabled);
     display: flex;
-    font-weight: 700;
+    font-weight: 500;
     height: 100%;
     margin: 0 0.5em;
     padding: 0 0.5em;
     text-decoration: none;
+    transition: color #{$snap} #{$ease-out};
+
+    &:hover {
+      color: var(--color-text);
+    }
 
     @media screen and (max-width: 530px) {
       margin: 0 0.2em;
@@ -60,6 +67,7 @@
 
   .footer__link-name {
     color: var(--color-text-dark);
+    font-size: 0.9em;
 
     @media screen and (max-width: 460px) {
       display: none;

@@ -1,7 +1,7 @@
 <template>
   <div class="brand" @click="toggleBrandMenu">
-    <span class="brand__name brand__name--small"><b>A</b>SF</span>
-    <span class="brand__name brand__name--big"><b>Archi</b>SteamFarm</span>
+    <span class="brand__name brand__name--small"><b>X</b>SF</span>
+    <span class="brand__name brand__name--big"><b>Xinu</b>SteamFarm</span>
     <div v-if="authenticated" class="brand__icon">
       <FontAwesomeIcon v-if="brandMenu" icon="times"></FontAwesomeIcon>
       <FontAwesomeIcon v-else icon="angle-down"></FontAwesomeIcon>
@@ -67,7 +67,6 @@
       },
       extractVersions(err) {
         if (err.result) {
-          // Extract version from result, if available
           return {
             remoteVersion: err.result,
             localVersion: this.$store.getters['asf/version'],
@@ -75,13 +74,10 @@
         }
 
         if (err.message.includes('≥')) {
-          // Fallback to message parsing
           const [localVersion, remoteVersion] = err.message.split(' ≥ ');
           return { remoteVersion, localVersion };
         }
 
-        // Return empty object to prevent throws on destructing if extraction failed
-        // Shouldn't happen, but who knows...
         return {};
       },
       async update() {
@@ -146,9 +142,10 @@
 </script>
 
 <style lang="scss">
+  @import '../../style/settings';
+
   .brand {
     align-items: center;
-    background: var(--color-theme-dark);
     box-sizing: border-box;
     color: var(--color-text);
     cursor: pointer;
@@ -157,7 +154,7 @@
     justify-content: space-between;
     padding: 0 1em;
     position: relative;
-    transition: ease-in-out width .3s;
+    transition: width #{$move} #{$ease-out};
     width: var(--navigation-width);
 
     .app--not-authorized & {
@@ -185,12 +182,23 @@
   }
 
   .brand__name {
-    font-size: 1.25em;
+    font-family: var(--font-display);
+    font-size: 1.1em;
+    font-weight: 400;
+    letter-spacing: -0.01em;
     overflow: hidden;
+
+    b {
+      font-weight: 700;
+    }
   }
 
   .brand__name--small {
     display: none;
+  }
+
+  .brand__icon {
+    color: var(--color-text-disabled);
   }
 
   .brand__menu {
@@ -198,18 +206,24 @@
     position: absolute;
     top: var(--navigation-height);
     transform-origin: top;
-    transition: transform .3s;
+    transition: transform #{$move} #{$ease-out};
     width: 100%;
   }
 
   .brand__menu-item {
     align-items: center;
-    background: var(--color-theme);
-    color: var(--color-text);
+    background: var(--color-background-light);
+    border-bottom: 1px solid var(--color-line-soft);
+    color: var(--color-text-secondary);
     cursor: pointer;
     display: flex;
+    font-size: 0.8125em;
+    font-weight: 500;
     height: var(--navigation-height);
+    letter-spacing: 0.04em;
     padding: 0 1.5em;
+    text-transform: uppercase;
+    transition: color #{$snap} #{$ease-out}, background #{$snap} #{$ease-out};
 
     .app--small-navigation & {
       justify-content: center;
@@ -217,7 +231,8 @@
     }
 
     &:hover {
-      background: var(--color-theme-dark);
+      background: var(--color-tint-5);
+      color: var(--color-theme);
     }
   }
 

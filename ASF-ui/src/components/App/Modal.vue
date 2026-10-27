@@ -44,10 +44,7 @@
         this.$router.push(this.$route.path.slice(0, this.$route.path.lastIndexOf('/')));
       },
       onKeyPress(event) {
-        // Ignore key presses when the modal is not visible
         if (!this.isShown) return;
-
-        // Ignore key presses inside inputs
         if (document.activeElement.tagName === 'TEXTAREA') return;
         if (document.activeElement.tagName === 'INPUT') return;
 
@@ -77,6 +74,8 @@
 </script>
 
 <style lang="scss">
+  @import '../../style/settings';
+
   .modal {
     align-items: center;
     bottom: 0;
@@ -90,24 +89,24 @@
   }
 
   .modal__background {
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--color-background-modal);
     bottom: 0;
     left: 0;
     position: fixed;
     right: 0;
     top: 0;
-    transition: background .2s linear;
+    transition: background #{$move} #{$ease-out};
   }
 
   .modal__body {
     position: relative;
-    transition: opacity .3s ease-out, transform .3s ease-out;
+    transition: opacity #{$move} #{$ease-out}, transform #{$move} #{$ease-out};
   }
 
   .modal__main {
-    background: var(--color-background-modal);
-    border-radius: 4px;
-    box-shadow: 0 0 5px 0 var(--color-border);
+    background: var(--color-background-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius, 2px);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -130,6 +129,11 @@
     position: absolute;
     right: -1.5em;
     top: 0.25em;
+    transition: color #{$snap} #{$ease-out};
+
+    &:hover {
+      color: var(--color-text);
+    }
   }
 
   .modal-enter, .modal-leave-to {
@@ -139,7 +143,7 @@
 
     .modal__body {
       opacity: 0;
-      transform: scale(0.75);
+      transform: scale(0.97);
     }
   }
 
@@ -149,6 +153,11 @@
     font-size: 1.5em;
     position: absolute;
     top: 50%;
+    transition: color #{$snap} #{$ease-out};
+
+    &:hover {
+      color: var(--color-text);
+    }
 
     &.left {
       left: -1em;

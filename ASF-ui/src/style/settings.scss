@@ -1,23 +1,106 @@
-$color-theme-blue: #367fa9;
-$color-theme-red: #a92616;
-$color-theme-teal: #359392;
-$color-theme-purple: #504d8e;
-$color-theme-green: #00a65a;
-$color-theme-orange: #D58D18;
+// ============================================================
+// XinuSteamFarm UI — "Amaterasu" design tokens
+// Paper & ink system: near-black paper, warm bone ink, hairline
+// rules, burnt-orange signal accents, near-square radius.
+// ============================================================
 
-$color-text: #fff;
-$color-text-dark: #111113;
-$color-text-info: #ff7300;
+// --- Edition palettes ---------------------------------------
+// Each theme switches the paper tint and the signal color, in the
+// spirit of ryoku.dev editions (default / void / fedora / nixos).
 
-$color-status-disabled: #bfc3cb;
-$color-status-offline: #898989;
-$color-status-online: #57cbde;
-$color-status-farming: #90ba3c;
+$editions: (
+  'orange': (
+    dark-paper: #000,
+    dark-raised: #0a0a0a,
+    dark-signal: #ce5e32,
+    light-paper: #efe9df,
+    light-raised: #f8f4ed,
+    light-signal: #b34f28,
+  ),
+  'blue': (
+    dark-paper: #030f19,
+    dark-raised: #0a1a28,
+    dark-signal: #6ea5cf,
+    light-paper: #e7edf3,
+    light-raised: #f4f8fb,
+    light-signal: #3d6f96,
+  ),
+  'green': (
+    dark-paper: #05110a,
+    dark-raised: #0c1f16,
+    dark-signal: #6daf8c,
+    light-paper: #e7efe9,
+    light-raised: #f3f8f4,
+    light-signal: #35714f,
+  ),
+  'purple': (
+    dark-paper: #0b0c1b,
+    dark-raised: #151730,
+    dark-signal: #9299d3,
+    light-paper: #ebebf4,
+    light-raised: #f6f6fb,
+    light-signal: #5c63a3,
+  ),
+  'red': (
+    dark-paper: #120503,
+    dark-raised: #231008,
+    dark-signal: #d3654d,
+    light-paper: #f2e9e5,
+    light-raised: #faf4f1,
+    light-signal: #a63f2c,
+  ),
+  'teal': (
+    dark-paper: #02100e,
+    dark-raised: #08211d,
+    dark-signal: #5fb3a1,
+    light-paper: #e6f0ed,
+    light-raised: #f2f9f6,
+    light-signal: #2f6d60,
+  ),
+);
 
+// --- Ink (text) ---------------------------------------------
+$ink: #cdc4ba;            // warm bone, primary text
+$ink-dim: #b0a9a0;        // secondary text
+$ink-muted: #958f87;      // muted text (descriptions)
+$ink-faint: #807a73;      // faint text (timestamps, hints)
+
+$ink-on-signal: #0a0a0a;  // text on signal-colored surfaces
+
+// --- Hairlines & tints (dark) -------------------------------
+$line-alpha: 26%;
+$line-soft-alpha: 13%;
+$line-strong-alpha: 42%;
+$tint-5-alpha: 5%;
+$tint-10-alpha: 10%;
+$tint-16-alpha: 16%;
+
+// --- Status palette (consistent across editions) ------------
+$color-status-online: #6daf8c;
+$color-status-farming: #ce5e32;
+$color-status-offline: #807a73;
+$color-status-disabled: #57524b;
+
+// --- Log levels ---------------------------------------------
+$color-level-debug: #807a73;
+$color-level-info: #7ca5b8;
+$color-level-error: #d3654d;
+$color-level-warning: #d3a04d;
+
+// --- Sizes --------------------------------------------------
 $size-navigation: 15rem;
 $size-navigation-small: 3rem;
 
-$color-level-debug: $color-status-offline;
-$color-level-info: $color-theme-teal;
-$color-level-error: $color-theme-red;
-$color-level-warning: $color-theme-orange;
+// --- Typefaces ----------------------------------------------
+$f-sans: "Space Grotesk Variable", system-ui, sans-serif;
+$f-display: "Fraunces Variable", ui-serif, Georgia, serif;
+$f-mono: "Space Mono", ui-monospace, monospace;
+
+// --- Motion -------------------------------------------------
+$snap: 90ms;              // hover state flips
+$move: 170ms;             // transforms
+$swap: 210ms;             // color/background swaps
+$ease-out: cubic-bezier(.215, .61, .355, 1);
+
+// --- Radius -------------------------------------------------
+$radius: 2px;

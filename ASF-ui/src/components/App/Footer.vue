@@ -1,14 +1,13 @@
 <template>
   <footer class="footer">
     <div class="footer__links">
-      <FooterLink name="GitHub" prefix="fab" icon="github" to="https://github.com/JustArchiNET"></FooterLink>
-      <FooterLink :name="$t('discussions')" icon="comments" to="https://github.com/JustArchiNET/ArchiSteamFarm/discussions"></FooterLink>
+      <FooterLink name="GitHub" prefix="fab" icon="github" to="https://github.com/x-inu/xinusteamfarm"></FooterLink>
       <FooterLink :name="$t('wiki')" icon="book-open" :to="wikiLink"></FooterLink>
     </div>
 
     <div v-if="authenticated" class="footer__statistic">
       <FontAwesomeIcon v-if="newReleaseAvailable" v-tooltip="$t('update-available')" class="footer__statistic-notify" icon="exclamation" size="sm" @click="redirectToReleases"></FontAwesomeIcon>
-      <span class="footer__statistic-name">ASF</span>
+      <span class="footer__statistic-name">XSF</span>
       <span class="footer__statistic-value">{{ versionString }}</span>
     </div>
   </footer>
@@ -42,9 +41,6 @@
         return `${this.version} - ${this.buildVariant} - ${this.uiHash}`;
       },
       wikiLink() {
-        // Keep this for the future. ASF-ui will also be translated at some point.
-        // const locale = (this.$i18n.locale !== 'en-US') ? `/Home-${this.$i18n.locale}` : '';
-        // return `https://github.com/JustArchiNET/ASF-ui/wiki${locale}`;
         return 'https://github.com/JustArchiNET/ASF-ui/wiki';
       },
     },
@@ -73,13 +69,14 @@
 </script>
 
 <style lang="scss">
+  @import '../../style/settings';
+
   .footer {
     align-items: center;
-    background: var(--color-background-light);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-line-soft);
     box-sizing: border-box;
     display: flex;
-    font-size: 0.9em;
+    font-size: 0.8125em;
     grid-area: footer;
     height: var(--navigation-height);
     padding: 0 0.5em;
@@ -92,6 +89,9 @@
   }
 
   .footer__statistic {
+    color: var(--color-text-disabled);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
     margin-left: auto;
     text-align: center;
   }
@@ -102,8 +102,8 @@
   }
 
   .footer__statistic-notify {
-    color: var(--color-text-info);
-    padding-right: 0.2em;
+    color: var(--color-theme);
     cursor: pointer;
+    padding-right: 0.2em;
   }
 </style>

@@ -106,21 +106,29 @@
 </script>
 
 <style lang="scss" scoped>
+  @import '../../style/settings';
+
   .bot {
     background: var(--color-background-light);
-    border-radius: 0 0 4px 4px;
-    border-top: 3px solid var(--color-status);
+    border: 1px solid var(--color-line-soft);
+    border-left: 2px solid var(--color-status);
+    border-radius: var(--radius, 2px);
     display: grid;
     grid-template-areas: 'avatar meta buttons';
     grid-template-columns: min-content 1fr auto;
-    padding: 0.5em;
-    transition: border .3s;
+    padding: 0.5em 0.75em;
+    transition: border-color #{$snap} #{$ease-out};
+
+    &:hover {
+      border-color: var(--color-border);
+    }
   }
 
   .bot__avatar {
+    border-radius: var(--radius, 2px);
     cursor: pointer;
     display: block;
-    height: 2.25em; // (1em + 0.8em) * 1.25
+    height: 2.25em;
     padding-right: 0.5em;
     width: 2.25em;
   }
@@ -141,9 +149,11 @@
 
   .bot__status-property--name {
     font-weight: 600;
+    letter-spacing: -0.01em;
   }
 
   .bot__status-property--text {
+    color: var(--color-text-dark);
     font-size: 0.8em;
     font-style: italic;
   }
@@ -160,14 +170,10 @@
     cursor: pointer;
     display: block;
     padding: 0.5em;
-    transition: color .3s;
+    transition: color #{$snap} #{$ease-out};
 
     &:hover {
-      color: var(--color-text-dark);
-
-      .app--dark-mode & {
-        color: var(--color-text);
-      }
+      color: var(--color-theme);
     }
   }
 </style>

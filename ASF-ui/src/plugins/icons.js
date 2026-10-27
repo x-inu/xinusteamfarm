@@ -1,71 +1,65 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { XICONS } from './icons-data';
 
-import {
-  faWrench, faBars, faLaptop, faUsers, faFileAlt, faTachometerAlt, faPowerOff, faPause, faCogs,
-  faClock, faTimesCircle, faCheckCircle, faEdit, faTimes, faSquare, faMoon, faPalette, faPlay,
-  faQuestion, faPlus, faSpinner, faKey, faTrash, faCloudDownloadAlt, faSignOutAlt, faAngleDown,
-  faLanguage, faGamepad, faClone, faLock, faBookOpen, faCodeBranch, faHourglassEnd, faPaste,
-  faHourglassHalf, faHourglassStart, faRedoAlt, faClipboard, faPuzzlePiece, faUndoAlt, faEye,
-  faEyeSlash, faChevronLeft, faChevronRight, faExclamation, faComments, faBan,
-} from '@fortawesome/free-solid-svg-icons';
+/*
+ * XinuSteamFarm icon system ("xicons").
+ *
+ * Replaces the FontAwesome runtime with a self-contained inline SVG set:
+ * 24px grid, hairline strokes, currentColor. Component names and the icon
+ * prop contract match the old FontAwesome setup, so existing templates
+ * (`icon="name"`, `:icon="[prefix, name]"`, fixedWidth, size, spin) keep
+ * working without changes.
+ */
 
-import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
+const XIcon = {
+  name: 'XIcon',
+  functional: true,
+  props: {
+    icon: { type: [String, Array], required: true },
+    fixedWidth: Boolean,
+    size: { type: String, default: undefined },
+    spin: Boolean,
+  },
+  render(createElement, ctx) {
+    const { props, data } = ctx;
 
-library.add(
-  faWrench,
-  faBars,
-  faLaptop,
-  faUsers,
-  faFileAlt,
-  faTachometerAlt,
-  faPowerOff,
-  faPause,
-  faCogs,
-  faClock,
-  faTimesCircle,
-  faCheckCircle,
-  faEdit,
-  faTimes,
-  faSquare,
-  faMoon,
-  faPalette,
-  faPlay,
-  faQuestion,
-  faPlus,
-  faSpinner,
-  faKey,
-  faTrash,
-  faCloudDownloadAlt,
-  faSignOutAlt,
-  faAngleDown,
-  faLanguage,
-  faGamepad,
-  faClone,
-  faLock,
-  faGithub,
-  faBookOpen,
-  faPaste,
-  faExclamation,
-  faCodeBranch,
-  faHourglassEnd,
-  faHourglassHalf,
-  faHourglassStart,
-  faRedoAlt,
-  faClipboard,
-  faPuzzlePiece,
-  faUndoAlt,
-  faEye,
-  faEyeSlash,
-  faChevronLeft,
-  faChevronRight,
-  faComments,
-  faBan,
-);
+    let name = props.icon;
+    if (Array.isArray(name)) name = name[1] || name[0];
+    if (typeof name !== 'string') return createElement('span');
+
+    const body = XICONS[name] || XICONS.question;
+
+    const classes = ['xicon', `xicon--${name}`];
+    if (data.staticClass) classes.unshift(data.staticClass);
+    if (data.class) classes.push(data.class);
+    if (props.fixedWidth) classes.push('xicon--fw');
+    if (props.size) classes.push(`xicon--${props.size}`);
+    if (props.spin) classes.push('xicon--spin');
+
+    return createElement('svg', {
+      ...data,
+      attrs: {
+        ...data.attrs,
+        viewBox: '0 0 24 24',
+        'aria-hidden': true,
+        focusable: false,
+        role: 'img',
+      },
+      class: classes,
+      domProps: { innerHTML: body },
+    });
+  },
+};
+
+const XLayers = {
+  name: 'XLayers',
+  render(createElement) {
+    return createElement('span', { class: 'xicons-layers' }, this.$slots.default);
+  },
+};
 
 export default {
   install(Vue) {
-    Vue.component('FontAwesomeIcon', FontAwesomeIcon);
-    Vue.component('FontAwesomeLayers', FontAwesomeLayers);
+    Vue.component('FontAwesomeIcon', XIcon);
+    Vue.component('FontAwesomeLayers', XLayers);
   },
 };
