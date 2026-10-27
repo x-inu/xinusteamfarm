@@ -27,6 +27,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -35,6 +36,8 @@ using ArchiSteamFarm.IPC.Responses;
 using ArchiSteamFarm.Steam;
 using ArchiSteamFarm.Steam.Integration;
 using ArchiSteamFarm.Web;
+using ArchiSteamFarm.Web.GitHub;
+using ArchiSteamFarm.Web.GitHub.Data;
 using ArchiSteamFarm.Web.Responses;
 using SteamKit2;
 
@@ -53,14 +56,37 @@ internal static class ArchiNet {
 			throw new InvalidOperationException(nameof(ASF.WebBrowser));
 		}
 
-		Uri request = new(URL, $"/Api/Checksum/{version}/{variant}");
-
-		ObjectResponse<GenericResponse<string>>? response;
+		// Checksum is fetched from the release itself instead of the upstream ArchiNet service, as it doesn't know builds published in this fork
+		ReleaseResponse? releaseResponse;
 
 		try {
-			response = await ASF.WebBrowser.UrlGetToJsonObject<GenericResponse<string>>(request, cancellationToken: cancellationToken).ConfigureAwait(false);
+			releaseResponse = await GitHubService.GetRelease(SharedInfo.GithubRepo, version.ToString(), cancellationToken).ConfigureAwait(false);
 		} catch (OperationCanceledException e) {
 			ASF.ArchiLogger.LogGenericDebuggingException(e);
+
+			return null;
+		} catch (Exception e) {
+			ASF.ArchiLogger.LogGenericWarningException(e);
+
+			return null;
+		}
+
+		ReleaseAsset? checksumAsset = releaseResponse?.Assets.FirstOrDefault(asset => !string.IsNullOrEmpty(asset.Name) && asset.Name.Equals("SHA512SUMS", StringComparison.OrdinalIgnoreCase));
+
+		if (checksumAsset == null) {
+			return "";
+		}
+
+		BinaryResponse? response;
+
+		try {
+			response = await ASF.WebBrowser.UrlGetToBinary(checksumAsset.DownloadURL, cancellationToken: cancellationToken).ConfigureAwait(false);
+		} catch (OperationCanceledException e) {
+			ASF.ArchiLogger.LogGenericDebuggingException(e);
+
+			return null;
+		} catch (Exception e) {
+			ASF.ArchiLogger.LogGenericWarningException(e);
 
 			return null;
 		}
@@ -69,7 +95,14 @@ internal static class ArchiNet {
 			return null;
 		}
 
-		return response.Content.Result ?? "";
+		string contents = Encoding.UTF8.GetString(response.Content as byte[] ?? [.. response.Content]);
+		string targetFile = $"{SharedInfo.ASF}-{variant}.zip";
+
+		return contents.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+			.Select(static line => line.Split(' ', 2, StringSplitOptions.TrimEntries))
+			.Where(parts => (parts.Length == 2) && parts[1].Equals(targetFile, StringComparison.OrdinalIgnoreCase))
+			.Select(static parts => parts[0])
+			.FirstOrDefault(static hash => !string.IsNullOrEmpty(hash) && hash.All(char.IsAsciiHexDigit)) ?? "";
 	}
 
 	internal static async Task<bool?> IsBadBot(ulong steamID, CancellationToken cancellationToken = default) {

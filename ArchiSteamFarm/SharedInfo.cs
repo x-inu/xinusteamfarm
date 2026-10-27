@@ -47,7 +47,7 @@ public static class SharedInfo {
 	internal const string EnvironmentVariableCryptKeyFile = $"{EnvironmentVariableCryptKey}_FILE";
 	internal const string EnvironmentVariableNetworkGroup = $"{ASF}_NETWORK_GROUP";
 	internal const string EnvironmentVariablePath = $"{ASF}_PATH";
-	internal const string GithubRepo = $"JustArchiNET/{AssemblyName}";
+	internal const string GithubRepo = "x-inu/xinusteamfarm"; // fork monorepo (upstream: JustArchiNET/ArchiSteamFarm)
 	internal const string GlobalConfigFileName = $"{ASF}{JsonConfigExtension}";
 	internal const string GlobalCrashFileName = $"{ASF}.crash";
 	internal const string GlobalDatabaseFileName = $"{ASF}{DatabaseExtension}";
